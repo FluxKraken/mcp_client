@@ -48,6 +48,7 @@ Create `mcp_config.toml`:
 provider = "openrouter"
 model = "anthropic/claude-3.5-sonnet"
 api_key = "sk-or-v1-..."  # Or set OPENROUTER_API_KEY env var
+# api_endpoint = "https://openrouter.ai/api/v1" # Optional: Custom base URL
 
 [mcp_server]
 url = "http://localhost:8000/sse"
@@ -68,6 +69,7 @@ mcp-client --config mcp_config.toml
 | `--model`        | Model name (e.g., `gpt-4`, `llama3`)            | `gpt-3.5-turbo` |
 | `--mcp-url`      | URL of the MCP Server (SSE endpoint)            | Required        |
 | `--api-key`      | API Key (overrides env var `LLM_API_KEY`)       | None            |
+| `--api-endpoint` | Custom API Endpoint / Base URL                  | None            |
 
 ### Environment Variables
 

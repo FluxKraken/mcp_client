@@ -2,6 +2,7 @@
 [llm_provider]
 provider = "ollama"
 model = "llama2"
+api_endpoint = "http://custom-ollama:11434/v1"
 
 [mcp_server]
 url = "http://localhost:9000/sse"

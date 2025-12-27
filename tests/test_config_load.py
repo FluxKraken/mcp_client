@@ -42,7 +42,8 @@ def test_config_loading(mock_loop):
         "ollama",      # provider from config
         "llama2",      # model from config
         "http://localhost:9000/sse", # mcp_url from config
-        None           # api_key
+        None,           # api_key
+        "http://custom-ollama:11434/v1" # base_url (mapped from api_endpoint)
     )
     print("Config Verification Successful!")
 

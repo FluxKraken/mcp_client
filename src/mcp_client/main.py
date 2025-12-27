@@ -19,7 +19,8 @@ async def run_chat_loop(
     provider: str,
     model: str,
     mcp_url: str,
-    api_key: Optional[str] = None
+    api_key: Optional[str] = None,
+    base_url: Optional[str] = None
 ):
     console.print(f"[bold green]Connecting to MCP Server at {mcp_url}...[/bold green]")
     
@@ -44,7 +45,7 @@ async def run_chat_loop(
                     }
                 })
 
-            llm_client = LLMClient(provider=provider, model=model, api_key=api_key)
+            llm_client = LLMClient(provider=provider, model=model, api_key=api_key, base_url=base_url)
             messages: List[Dict[str, Any]] = []
 
             console.print("[bold blue]Chat started! Type 'exit' or 'quit' to end.[/bold blue]")
@@ -120,7 +121,8 @@ def main(
     provider: Optional[str] = typer.Option(None, help="LLM Provider: openai, openrouter, ollama"),
     model: Optional[str] = typer.Option(None, help="Model name"),
     mcp_url: Optional[str] = typer.Option(None, help="URL of the MCP Server (SSE)"),
-    api_key: Optional[str] = typer.Option(None, envvar="LLM_API_KEY", help="API Key for the provider")
+    api_key: Optional[str] = typer.Option(None, envvar="LLM_API_KEY", help="API Key for the provider"),
+    api_endpoint: Optional[str] = typer.Option(None, "--api-endpoint", help="Custom API Endpoint (Base URL) for the LLM")
 ):
     """
     Start the MCP Client Chat.
@@ -147,6 +149,7 @@ def main(
     final_provider = resolve(provider, config._llm_config, 'provider', "openai")
     final_model = resolve(model, config._llm_config, 'model', "gpt-3.5-turbo")
     final_api_key = resolve(api_key, config._llm_config, 'api_key', None)
+    final_base_url = resolve(api_endpoint, config._llm_config, 'base_url', None)
     
     # MCP URL is required eventually
     final_mcp_url = resolve(mcp_url, config._mcp_config, 'url', None)
@@ -155,7 +158,7 @@ def main(
         console.print("[bold red]Error: MCP Server URL is required via --mcp-url or config file.[/bold red]")
         raise typer.Exit(code=1)
 
-    asyncio.run(run_chat_loop(final_provider, final_model, final_mcp_url, final_api_key))
+    asyncio.run(run_chat_loop(final_provider, final_model, final_mcp_url, final_api_key, final_base_url))
 
 if __name__ == "__main__":
     app()

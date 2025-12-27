@@ -34,7 +34,8 @@ class Config:
                 provider=llm_data.get("provider", "openai"),
                 model=llm_data.get("model", "gpt-3.5-turbo"),
                 api_key=llm_data.get("api_key"),
-                base_url=llm_data.get("base_url")
+                # Support both base_url and api_endpoint
+                base_url=llm_data.get("base_url") or llm_data.get("api_endpoint")
             )
 
         mcp_data = data.get("mcp_server", {})
