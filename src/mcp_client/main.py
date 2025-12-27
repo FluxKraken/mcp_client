@@ -12,7 +12,7 @@ from .client import connect_mcp_sse
 from .llm import LLMClient
 from .config import config
 
-app = typer.Typer()
+# app = typer.Typer() # Removed app usage in favor of typer.run for single-command CLI
 console = Console()
 
 async def run_chat_loop(
@@ -115,8 +115,8 @@ async def run_chat_loop(
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")
 
-@app.command()
-def main(
+
+def cli_entry(
     config_file: Optional[str] = typer.Option(None, "--config", "-c", help="Path to TOML configuration file"),
     provider: Optional[str] = typer.Option(None, help="LLM Provider: openai, openrouter, ollama"),
     model: Optional[str] = typer.Option(None, help="Model name"),
@@ -160,5 +160,9 @@ def main(
 
     asyncio.run(run_chat_loop(final_provider, final_model, final_mcp_url, final_api_key, final_base_url))
 
+def main():
+    """Entry point for the console script."""
+    typer.run(cli_entry)
+
 if __name__ == "__main__":
-    app()
+    main()

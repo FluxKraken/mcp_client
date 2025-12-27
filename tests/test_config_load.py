@@ -18,7 +18,7 @@ sys.modules["mcp.client.stdio"] = MagicMock()
 sys.modules["mcp.client.session"] = MagicMock()
 
 # Now import main
-from mcp_client.main import main, run_chat_loop
+from mcp_client.main import main, run_chat_loop, cli_entry 
 
 @patch("mcp_client.main.run_chat_loop")
 def test_config_loading(mock_loop):
@@ -27,15 +27,19 @@ def test_config_loading(mock_loop):
     # Path to test config
     config_path = os.path.join(os.getcwd(), "tests", "test_config.toml")
     
-    # Run main with --config
-    # We catch SystemExit because Typer exits
-    try:
-        from typer.testing import CliRunner
-        from mcp_client.main import app
-        runner = CliRunner()
-        result = runner.invoke(app, ["--config", config_path])
-    except SystemExit:
-        pass
+    # Run cli_entry
+    # We invoke it via Typer's CliRunner on the function itself, wrapping it in a Typer app temporarily
+    # or just use typer.testing.CliRunner to invoke the function if we treat it as command.
+    
+    from typer.testing import CliRunner
+    import typer
+    runner = CliRunner()
+    
+    # Since cli_entry is just a function now, we need to wrap it in an app to test with CliRunner
+    app = typer.Typer()
+    app.command()(cli_entry)
+    
+    result = runner.invoke(app, ["--config", config_path])
 
     # Verify run_chat_loop was called with values from config
     mock_loop.assert_called_with(
