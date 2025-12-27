@@ -114,6 +114,13 @@ async def run_chat_loop(
                         
     except Exception as e:
         console.print(f"[bold red]Error: {e}[/bold red]")
+        import traceback
+        traceback.print_exc()
+        
+        # Handle TaskGroup exceptions (Python 3.11+)
+        if hasattr(e, 'exceptions'):
+            for i, exc in enumerate(e.exceptions):
+                console.print(f"[bold red]Sub-exception {i+1}: {exc}[/bold red]")
 
 
 def cli_entry(
