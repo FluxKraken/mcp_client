@@ -1,0 +1,7 @@
+
+[llm_provider]
+provider = "ollama"
+model = "llama2"
+
+[mcp_server]
+url = "http://localhost:9000/sse"
