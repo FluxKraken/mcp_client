@@ -121,6 +121,8 @@ async def run_chat_loop(
         if hasattr(e, 'exceptions'):
             for i, exc in enumerate(e.exceptions):
                 console.print(f"[bold red]Sub-exception {i+1}: {exc}[/bold red]")
+                if "Child exited without calling task_status.started()" in str(exc):
+                    console.print("[bold yellow]Hint: This usually means the MCP Client could not connect to the SSE endpoint. Check if the URL is correct and reachable.[/bold yellow]")
 
 
 def cli_entry(
